@@ -3,9 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { OrderDetailsData, OrderItem } from '@/lib/types';
 
-function prepOrderDetails(orderDetailsData: string): OrderDetailsData {
+function prepOrderDetails(orderDetailsData: string | OrderItem[]): OrderDetailsData {
   try {
-    const parsedItems: OrderItem[] = JSON.parse(orderDetailsData);
+    // Handle both cases: either a JSON string or direct object
+    const parsedItems: OrderItem[] = typeof orderDetailsData === 'string' 
+      ? JSON.parse(orderDetailsData) 
+      : orderDetailsData;
+      
     const totalAmount = parsedItems.reduce((sum, item) => {
       return sum + (item.price * item.quantity);
     }, 0);
@@ -18,7 +22,12 @@ function prepOrderDetails(orderDetailsData: string): OrderDetailsData {
 
     return orderDetails;
   } catch (error) {
-    throw new Error(`Failed to parse order details: ${error}`);
+    console.error("Error parsing order details:", error);
+    // Return empty order details instead of throwing
+    return {
+      items: [],
+      totalAmount: 0
+    };
   }
 }
 
