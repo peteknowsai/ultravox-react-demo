@@ -1,14 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-
-interface CallerDetailsData {
-  name?: string;
-  age?: number;
-  situation?: string;
-  supportNeeded?: string;
-  previousHelp?: string;
-}
+import { CallerDetailsData } from '@/lib/types';
+import { getCallerDetails, subscribeToCallerDetails } from '@/lib/callerDetailsStore';
 
 function prepCallerDetails(callerDetailsData: string | CallerDetailsData): CallerDetailsData {
   try {
@@ -26,24 +20,30 @@ function prepCallerDetails(callerDetailsData: string | CallerDetailsData): Calle
 }
 
 const CallerDetails: React.FC = () => {
-  const [callerDetails, setCallerDetails] = useState<CallerDetailsData>({});
+  const [callerDetails, setCallerDetails] = useState<CallerDetailsData>(getCallerDetails());
 
   useEffect(() => {
+    // Subscribe to changes in the callerDetailsStore
+    const unsubscribe = subscribeToCallerDetails(() => {
+      setCallerDetails(getCallerDetails());
+    });
+
+    // Legacy event handling for backward compatibility
     const handleCallerUpdate = (event: CustomEvent<string>) => {
       console.log(`got caller details event: ${JSON.stringify(event.detail)}`);
-
-      const formattedData: CallerDetailsData = prepCallerDetails(event.detail);
-      setCallerDetails(formattedData);
+      // We don't need to do anything here anymore as the store handles the updates
     };
 
     const handleCallEnded = () => {
-      setCallerDetails({});
+      // The store will be reset in callFunctions.ts
     };
 
     window.addEventListener('callerDetailsUpdated', handleCallerUpdate as EventListener);
     window.addEventListener('callEnded', handleCallEnded as EventListener);
 
     return () => {
+      // Clean up subscriptions and event listeners
+      unsubscribe();
       window.removeEventListener('callerDetailsUpdated', handleCallerUpdate as EventListener);
       window.removeEventListener('callEnded', handleCallEnded as EventListener);
     };

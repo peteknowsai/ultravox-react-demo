@@ -2,6 +2,7 @@
 import { UltravoxSession, UltravoxSessionStatus, Transcript, UltravoxExperimentalMessageEvent, Role } from 'ultravox-client';
 import { JoinUrlResponse, CallConfig } from '@/lib/types';
 import { updateOrderTool, updateCallerDetailsTool } from './clientTools';
+import { resetCallerDetails } from './callerDetailsStore';
 
 let uvSession: UltravoxSession | null = null;
 const debugMessages: Set<string> = new Set(["debug"]);
@@ -119,6 +120,9 @@ export async function endCall(): Promise<void> {
     uvSession.leaveCall();
     uvSession = null;
   }
+
+  // Reset the caller details store
+  resetCallerDetails();
 
   // Dispatch a custom event when the call ends so that we can clear the order details form
   if (typeof window !== 'undefined') {
