@@ -1,7 +1,7 @@
 'use client';
 import { UltravoxSession, UltravoxSessionStatus, Transcript, UltravoxExperimentalMessageEvent, Role } from 'ultravox-client';
 import { JoinUrlResponse, CallConfig } from '@/lib/types';
-import { updateOrderTool } from './clientTools';
+import { updateOrderTool, updateCallerDetailsTool } from './clientTools';
 
 let uvSession: UltravoxSession | null = null;
 const debugMessages: Set<string> = new Set(["debug"]);
@@ -73,10 +73,15 @@ export async function startCall(callbacks: CallCallbacks, callConfig: CallConfig
     // Start up our Ultravox Session
     uvSession = new UltravoxSession({ experimentalMessages: debugMessages });
     
-    // Register our tool for order details
+    // Register our tools
     uvSession.registerToolImplementation(
       "updateOrder",
       updateOrderTool
+    );
+    
+    uvSession.registerToolImplementation(
+      "updateCallerDetails",
+      updateCallerDetailsTool
     );
 
     if(showDebugMessages) {

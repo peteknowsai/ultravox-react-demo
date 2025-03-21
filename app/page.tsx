@@ -12,7 +12,7 @@ import CallStatus from './components/CallStatus';
 import DebugMessages from '@/app/components/DebugMessages';
 import MicToggleButton from './components/MicToggleButton';
 import { PhoneOffIcon } from 'lucide-react';
-import OrderDetails from './components/OrderDetails';
+import CallerDetails from './components/CallerDetails';
 
 type SearchParamsProps = {
   showMuteSpeakerButton: boolean;
@@ -216,7 +216,7 @@ export default function Home() {
                 </div>
                 {/* Call Status */}
                 <CallStatus status={agentStatus}>
-                  <OrderDetails />
+                  <CallerDetails />
                 </CallStatus>
               </div>
             </div>

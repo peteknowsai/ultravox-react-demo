@@ -28,10 +28,12 @@ function getSystemPrompt() {
   - School Resources: Support available in educational settings
 
   ## Tool Usage Rules
-  - You must call the tool "updateOrder" immediately when:
-    - User confirms an item
-    - User requests item removal
-    - User modifies quantity
+  - You must call the tool "updateCallerDetails" immediately when:
+    - User shares their name
+    - User mentions their age
+    - User describes their situation or concerns
+    - User discusses previous help they've sought
+    - User indicates what type of support they need
   - Do not emit text during tool calls
   - Maintain confidentiality and privacy
 

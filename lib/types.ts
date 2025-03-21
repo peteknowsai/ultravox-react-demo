@@ -143,3 +143,12 @@ export interface OrderDetailsData {
   items: OrderItem[];
   totalAmount: number;
 }
+
+// For our caller details component
+export interface CallerDetailsData {
+  name?: string;
+  age?: number;
+  situation?: string;
+  supportNeeded?: string;
+  previousHelp?: string;
+}
